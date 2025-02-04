@@ -10,7 +10,6 @@ A MagicMirror module that displays the Culver's flavor of the day from a specifi
 - Display the current flavor of the day from Culver's
 - Optionally display a description and image of the flavor
 - Optionally show tomorrow's flavor
-- Customizable through `config.js` for enabling/disabling features
 
 ## Installation
 

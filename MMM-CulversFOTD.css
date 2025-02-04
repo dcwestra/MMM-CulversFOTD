@@ -1,0 +1,28 @@
+/* Default styles for MMM-CulversFOTD */
+.MMM-CulversFOTD {
+    text-align: center;
+    color: white;
+}
+
+.MMM-CulversFOTD .module-header {
+    text-align: right;
+}
+
+.MMM-CulversFOTD .flavor {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.MMM-CulversFOTD .description {
+    font-size: 16px;
+}
+
+.MMM-CulversFOTD img {
+    max-width: 150px;
+    border-radius: 10px;
+}
+
+.MMM-CulversFOTD .tomorrow {
+    font-size: 16px;
+    color: #FFD700;
+}

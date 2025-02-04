@@ -1,9 +1,10 @@
 Module.register("MMM-CulversFOTD", {
   defaults: {
-    storeSlug: "sauk-city", // Default store, change as needed
+    storeSlug: "sauk-city",
     showDescription: true,
     showImage: true,
-    showTomorrowFlavor: true
+    showTomorrowFlavor: true,
+    updateInterval: 3600000,
   },
 
   getStyles: function () {
@@ -13,6 +14,11 @@ Module.register("MMM-CulversFOTD", {
   start: function () {
       this.flavorData = null;
       this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
+
+      // Set up the interval to refresh the flavor of the day every hour
+      setInterval(() => {
+        this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
+      }, this.config.updateInterval);
   },
 
   socketNotificationReceived: function (notification, payload) {

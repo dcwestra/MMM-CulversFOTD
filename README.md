@@ -63,6 +63,7 @@ Option|Possible values|Default|Description
 `showDescription`|`true,false`|`true`|Optional: Whether or not to display the flavor's description
 `showImage`|`true,false`|`true`|Optional: Whether or not to display an image of the flavor
 `showTomorrow`|`true,false`|`true`|Optional: Whether or not to display tomorrow's flavor
+`updateInterval`|`number`|`3600000`|Optional: Set interval to recheck the flavor of the day
 
 
 ## License

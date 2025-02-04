@@ -2,6 +2,9 @@
 
 A MagicMirror module that displays the Culver's flavor of the day from a specific store. It pulls data from the Culver's website and shows today's flavor, tomorrow's flavor, and an optional description and image.
 
+![image](https://github.com/user-attachments/assets/a4f17dc4-e5c1-493d-bd99-cdf571fd436d)
+
+
 ## Features
 
 - Display the current flavor of the day from Culver's
@@ -44,6 +47,14 @@ A MagicMirror module that displays the Culver's flavor of the day from a specifi
      }
    }
    ```
+
+6. Finding the `storeSlug`:
+   Navigate to the desired store page and copy the location name from the URL
+   Example: The `storeSlug` for `https://www.culvers.com/restaurants/sauk-city` would be `sauk-city`
+
+   ![image](https://github.com/user-attachments/assets/99fcb5e2-32fa-4708-93e7-eebaed0de1e7)
+
+   
 
 ## Configuration
 

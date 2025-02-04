@@ -47,12 +47,12 @@ A MagicMirror module that displays the Culver's flavor of the day from a specifi
 
 ## Configuration
 
-| Option           | Description                                | Default Value           |
-|------------------|--------------------------------------------|-------------------------|
-| `storeSlug`      | The store's unique identifier (found in URL) | `"sauk-city"` |
-| `showDescription`| Whether or not to display the flavor's description | `true`                  |
-| `showImage`      | Whether or not to display an image of the flavor | `true`                  |
-| `showTomorrow`   | Whether or not to display tomorrow's flavor | `true`        
+Option|Possible values|Default|Description
+------|------|------|-----------
+`storeSlug`|`string`|`"sauk-city"`|The store's unique identifier (found in URL)
+`showDescription`|`true,false`|`true`|Optional: Whether or not to display the flavor's description
+`showImage`|`true,false`|`true`|Optional: Whether or not to display an image of the flavor
+`showTomorrow`|`true,false`|`true`|Optional: Whether or not to display tomorrow's flavor
 
 
 ## License

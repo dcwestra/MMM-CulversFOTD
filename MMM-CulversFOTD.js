@@ -13,16 +13,13 @@ Module.register("MMM-CulversFOTD", {
 
   start: function () {
       this.flavorData = null;
-      this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
-
-      // Set up the interval to refresh the flavor of the day every hour
-      setInterval(() => {
-        this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
-      }, this.config.updateInterval);
+      this.getData();
+      this.scheduleUpdate();
   },
 
   socketNotificationReceived: function (notification, payload) {
       if (notification === "FLAVOR_OF_THE_DAY") {
+        console.log("Received updated flavor data:", payload); // Debugging
         this.flavorData = payload;
           this.updateDom();
       }
@@ -64,7 +61,7 @@ Module.register("MMM-CulversFOTD", {
       if (this.config.showImage && this.flavorData.image) {
           let img = document.createElement("img");
           img.src = this.flavorData.image;
-          img.calssName = "flavor-image";
+          img.className = "flavor-image";
           wrapper.appendChild(img);
       }
 
@@ -77,5 +74,21 @@ Module.register("MMM-CulversFOTD", {
       }
 
       return wrapper;
-  }
+    },
+
+    scheduleUpdate: function(delay) {
+        var nextLoad = this.config.updateInterval;
+        if (typeof delay !== "undefined" && delay >= 0) {
+            nextLoad = delay;
+        }
+
+        var self = this;
+        setInterval(function() {
+            self.getData();
+        }, nextLoad);
+    },
+
+    getData: function () {
+        this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
+    }
 });

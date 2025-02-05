@@ -29,6 +29,7 @@
   "homepage": "https://github.com/dcwestra/MMM-CulversFOTD#readme",
   "dependencies": {
     "axios": "^1.7.9",
-    "cheerio": "^1.0.0"
+    "cheerio": "^1.0.0",
+    "moment": "^2.30.1"
   }
 }

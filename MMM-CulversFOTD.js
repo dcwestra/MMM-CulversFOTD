@@ -13,8 +13,12 @@ Module.register("MMM-CulversFOTD", {
 
   start: function () {
       this.flavorData = null;
-      this.getData();
-      this.scheduleUpdate();
+      this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
+
+      // Set up the interval to refresh the flavor of the day every hour
+      setInterval(() => {
+        this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
+      }, this.config.updateInterval);
   },
 
   socketNotificationReceived: function (notification, payload) {
@@ -61,7 +65,7 @@ Module.register("MMM-CulversFOTD", {
       if (this.config.showImage && this.flavorData.image) {
           let img = document.createElement("img");
           img.src = this.flavorData.image;
-          img.className = "flavor-image";
+          img.calssName = "flavor-image";
           wrapper.appendChild(img);
       }
 
@@ -74,21 +78,5 @@ Module.register("MMM-CulversFOTD", {
       }
 
       return wrapper;
-    },
-
-    scheduleUpdate: function(delay) {
-        var nextLoad = this.config.updateInterval;
-        if (typeof delay !== "undefined" && delay >= 0) {
-            nextLoad = delay;
-        }
-
-        var self = this;
-        setInterval(function() {
-            self.getData();
-        }, nextLoad);
-    },
-
-    getData: function () {
-        this.sendSocketNotification("GET_FLAVOR_OF_THE_DAY", { storeSlug: this.config.storeSlug });
-    }
+  }
 });

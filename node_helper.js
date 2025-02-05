@@ -74,7 +74,7 @@ module.exports = NodeHelper.create({
             flavor: flavorTitle,
             description: flavorDescription,
             image: flavorImage,
-            tomorrowFlavor: flavors[1] ? flavors[1].title : "", // Add tomorrow's flavor if available
+            tomorrowFlavor: flavors[1] ? `Tomorrow's flavor:<br>${flavors[1].title}` : "", // Add tomorrow's flavor if available
         };
 
         // Send the flavor data back to MagicMirror

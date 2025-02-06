@@ -27,66 +27,61 @@ module.exports = NodeHelper.create({
         const url = `https://www.culvers.com/restaurants/${storeSlug}`;
         console.log(`Fetching data from: ${url}`);
 
-    try {
-        const { data } = await axios.get(url);
-        const $ = cheerio.load(data);
-        
-        // Find the __NEXT_DATA__ script tag
-        const scriptTag = $('script#__NEXT_DATA__');
-        if (!scriptTag.length) {
-            throw new Error("__NEXT_DATA__ script not found on the page.");
-        }
-
-        // Parse the JSON from the script tag
-        const jsonData = JSON.parse(scriptTag.html());
-
-        // Now parse the date from the jsonData
-        const flavors = jsonData.props?.pageProps?.page?.customData?.restaurantCalendar?.flavors;
-
-        if (!flavors || flavors.length === 0) {
-            throw new Error("No flavor data found.");
-        }
-
-        // Get today's date in 'YYYY-MM-DD' format
-        const today = moment().format('YYYY-MM-DD');
-
-        // Loop through the flavors and find the matching date
-        let flavorForToday = null;
-        for (let flavor of flavors) {
-            const flavorDate = moment(flavor.onDate).format('YYYY-MM-DD'); // Format the timestamp to just date
-
-        if (flavorDate === today) {
-            flavorForToday = flavor;
-            break;
+        try {
+            const { data } = await axios.get(url);
+            const $ = cheerio.load(data);
+            
+            // Find the __NEXT_DATA__ script tag
+            const scriptTag = $('script#__NEXT_DATA__');
+            if (!scriptTag.length) {
+                throw new Error("__NEXT_DATA__ script not found on the page.");
             }
+
+            // Parse the JSON from the script tag
+            const jsonData = JSON.parse(scriptTag.html());
+
+            // Now parse the date from the jsonData
+            const flavors = jsonData.props?.pageProps?.page?.customData?.restaurantCalendar?.flavors;
+
+            if (!flavors || flavors.length === 0) {
+                throw new Error("No flavor data found.");
+            }
+
+            // Get today's and tomorrow's dates in 'YYYY-MM-DD' format
+            const today = moment().format('YYYY-MM-DD');
+            const tomorrow = moment().add(1, 'day').format('YYYY-MM-DD');
+
+            let flavorForToday = null;
+            let flavorForTomorrow = null;
+
+            for (let flavor of flavors) {
+                const flavorDate = moment(flavor.onDate).format('YYYY-MM-DD');
+
+                if (flavorDate === today) {
+                    flavorForToday = flavor;
+                } else if (flavorDate === tomorrow) {
+                    flavorForTomorrow = flavor;
+                }
+
+                // Exit loop early if both are found
+                if (flavorForToday && flavorForTomorrow) break;
+            }
+
+            // Prepare data for MagicMirror
+            const flavorData = {
+                store: jsonData.props?.pageProps?.page?.customData?.restaurantDetails?.title || "Culver's",
+                flavor: flavorForToday ? flavorForToday.title : "Not available",
+                description: flavorForToday ? flavorForToday.description : "",
+                image: flavorForToday?.image?.src || "",
+                tomorrowFlavor: flavorForTomorrow ? `Tomorrow's flavor:<br>${flavorForTomorrow.title}` : "Not available",
+            };
+
+            // Send the flavor data back to MagicMirror
+            this.sendSocketNotification("FLAVOR_OF_THE_DAY", flavorData);
+
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+            this.sendSocketNotification("FLAVOR_OF_THE_DAY_ERROR", { error: error.message });
         }
-
-        // If a flavor is found for today, log and send it
-        if (flavorForToday) {
-            const storeName = jsonData.props?.pageProps?.page?.customData?.restaurantDetails?.title;
-            const flavorTitle = flavorForToday.title;
-            const flavorDescription = flavorForToday.description;
-            const flavorImage = flavorForToday.image?.src;
-
-        // Prepare data for MagicMirror
-        const flavorData = {
-            store: storeName,
-            flavor: flavorTitle,
-            description: flavorDescription,
-            image: flavorImage,
-            tomorrowFlavor: flavors[1] ? `Tomorrow's flavor:<br>${flavors[1].title}` : "", // Add tomorrow's flavor if available
-        };
-
-        // Send the flavor data back to MagicMirror
-        this.sendSocketNotification("FLAVOR_OF_THE_DAY", flavorData);
-
-      } else {
-        console.error("No flavor found for today's date.");
-      }
-
-    } catch (error) {
-      console.error("Error fetching data:", error.message);
-      this.sendSocketNotification("FLAVOR_OF_THE_DAY_ERROR", { error: error.message });
-    }
-  },
+    },
 });

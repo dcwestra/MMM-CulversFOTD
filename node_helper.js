@@ -69,7 +69,7 @@ module.exports = NodeHelper.create({
 
             // Prepare data for MagicMirror
             const flavorData = {
-                store: jsonData.props?.pageProps?.page?.customData?.restaurantDetails?.title || "Culver's",
+                store: jsonData.props?.pageProps?.page?.customData?.restaurantDetails?.name || "Culver's",
                 flavor: flavorForToday ? flavorForToday.title : "Not available",
                 description: flavorForToday ? flavorForToday.description : "",
                 image: flavorForToday?.image?.src || "",
